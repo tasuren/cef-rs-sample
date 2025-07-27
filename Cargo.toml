@@ -1,0 +1,6 @@
+[workspace]
+members = ["crates/bundle-macos", "crates/chrome", "crates/chrome-helper"]
+resolver = "3"
+
+[workspace.dependencies]
+cef = "137.1.0"

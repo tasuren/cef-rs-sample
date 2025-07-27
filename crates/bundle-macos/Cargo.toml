@@ -1,0 +1,9 @@
+[package]
+name = "cef-sample-bundle-macos"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+cef = { workspace = true }
+plist = "1.7.4"
+serde = { version = "1.0.219", features = ["derive"] }
