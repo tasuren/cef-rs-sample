@@ -103,12 +103,12 @@ mod mac {
         exec_name: &str,
     ) -> Result<(), Box<dyn std::error::Error>> {
         let info_plist = InfoPlist {
-            cf_bundle_development_region: "ja".to_string(),
+            cf_bundle_development_region: "en".to_string(),
             cf_bundle_display_name: exec_name.to_string(),
             cf_bundle_executable: exec_name.to_string(),
-            cf_bundle_identifier: "jp.tasuren.cef-sample".to_string(),
+            cf_bundle_identifier: "org.cef-rs.cefsimple.helper".to_string(),
             cf_bundle_info_dictionary_version: "6.0".to_string(),
-            cf_bundle_name: "cef-sample".to_string(),
+            cf_bundle_name: "cef-rs".to_string(),
             cf_bundle_package_type: "APPL".to_string(),
             cf_bundle_signature: "????".to_string(),
             cf_bundle_version: "1.0.0".to_string(),
