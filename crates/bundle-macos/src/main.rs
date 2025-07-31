@@ -119,7 +119,7 @@ mod mac {
                 .collect(),
             ls_file_quarantine_enabled: true,
             ls_minimum_system_version: "11.0".to_string(),
-            ls_ui_element: "1".to_string(),
+            ls_ui_element: "0".to_string(),
             ns_bluetooth_always_usage_description: exec_name.to_string(),
             ns_supports_automatic_graphics_switching: true,
             ns_web_browser_publickey_credential_usage_description: exec_name.to_string(),
