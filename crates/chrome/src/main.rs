@@ -107,7 +107,7 @@ impl ImplBrowserProcessHandler for DemoBrowserProcessHandler {
     fn on_context_initialized(&self) {
         println!("cef context intiialized");
         let mut client = DemoClient::new_client();
-        let url = CefString::from("https://www.google.com");
+        let url = CefString::from("chrome://settings/");
 
         let browser_view = browser_view_create(
             Some(&mut client),
