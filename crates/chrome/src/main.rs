@@ -298,6 +298,7 @@ fn main() {
         // non-browser process does not initialize cef
         return;
     }
+
     let settings = Settings::default();
     assert_eq!(
         initialize(
