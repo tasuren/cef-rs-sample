@@ -1,6 +1,0 @@
-[env]
-CEF_PATH = { value = "/Users/tasuren/.local/share/cef", force = true }
-DYLD_FALLBACK_LIBRARY_PATH = { value = "Users/tasuren/.local/share/cef:/Users/tasuren/.local/share/cef/Chromium Embedded Framework.framework/Libraries", force = true }
-
-[build]
-rustc-wrapper = "/opt/homebrew/bin/sccache"
