@@ -68,29 +68,6 @@ impl ImplRenderHandler for SampleRenderHandler {
         }
     }
 
-    fn screen_info(
-        &self,
-        _browser: Option<&mut Browser>,
-        screen_info: Option<&mut ScreenInfo>,
-    ) -> ::std::os::raw::c_int {
-        if let Some(screen_info) = screen_info {
-            screen_info.device_scale_factor = self.scale_factor;
-            return true as _;
-        }
-        false as _
-    }
-
-    fn screen_point(
-        &self,
-        browser: Option<&mut Browser>,
-        view_x: ::std::os::raw::c_int,
-        view_y: ::std::os::raw::c_int,
-        screen_x: Option<&mut ::std::os::raw::c_int>,
-        screen_y: Option<&mut ::std::os::raw::c_int>,
-    ) -> ::std::os::raw::c_int {
-        false as _
-    }
-
     fn on_paint(
         &self,
         browser: Option<&mut Browser>,
@@ -101,6 +78,7 @@ impl ImplRenderHandler for SampleRenderHandler {
         width: ::std::os::raw::c_int,
         height: ::std::os::raw::c_int,
     ) {
+        println!("aaaaa");
         println!("1 {width} {height}");
     }
 }

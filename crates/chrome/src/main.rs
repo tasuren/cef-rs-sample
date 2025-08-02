@@ -1,4 +1,4 @@
-use cef::{args::Args, rc::*, *};
+use cef::{args::Args, *};
 use std::sync::{Arc, Mutex};
 use winit::{
     event_loop::{ControlFlow, EventLoop},
