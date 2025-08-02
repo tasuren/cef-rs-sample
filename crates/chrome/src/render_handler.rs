@@ -1,4 +1,4 @@
-use std::{cell::RefCell, num::NonZero, ptr::NonNull};
+use std::{cell::RefCell, num::NonZero};
 
 use cef::{rc::*, *};
 use softbuffer::{Context, Surface};
@@ -105,58 +105,44 @@ impl ImplRenderHandler for SampleRenderHandler {
         false as _
     }
 
+    #[allow(clippy::not_unsafe_ptr_arg_deref)]
     fn on_paint(
         &self,
         _browser: Option<&mut Browser>,
         _type: PaintElementType,
         _dirty_rects_count: usize,
         _dirty_rects: Option<&Rect>,
-        source_buffer: *const u8,
+        buffer: *const u8,
         width: ::std::os::raw::c_int,
         height: ::std::os::raw::c_int,
     ) {
-        // bufferはBGRAの順でu8が並んだ、１ピクセルにつきu32のデータが並ぶ列の、
-        // 最初のアドレスを示す生ポインタ。
-
         let mut surface = self.surface.borrow_mut();
         let mut dest_buffer = surface
             .buffer_mut()
             .expect("Failed to get buffer of surface");
 
-        #[inline]
-        unsafe fn unpack_bgra(mut buffer: NonNull<u8>) -> (NonNull<u8>, (u32, u32, u32, u32)) {
-            unsafe {
-                // Blue of BGRA
-                let blue = buffer.read() as u32;
+        // CEFから提供される`buffer`は、1ピクセルにつきu8が4つ分のBGRAの塊(u32)の列の先頭のポインタ。
+        // このため、ここから全ピクセル数分までは画像データであり、そこまでを配列として参照する。
+        let pixel_count = (width * height) as usize;
+        let len = pixel_count * size_of::<u32>();
+        let source_slice = unsafe { std::slice::from_raw_parts(buffer, len) };
 
-                // Green of BGRA
-                buffer = buffer.add(1);
-                let green = buffer.read() as u32;
+        // そのままだとデータはBGRAのチ列なので、softbufferの要求する0RGBの形に変換する必要がある。
+        // そのため、変換のためにBGRAを分解してRGBを取り出したい。そこで、u8のBGRAのチャンクで分割。
+        let source_pixels = source_slice.chunks_exact(size_of::<u32>());
 
-                // Red of BGRA
-                buffer = buffer.add(1);
-                let red = buffer.read() as u32;
+        // １ピクセル毎、バッファに書き込んでいく。
+        for (dest_pixel, src_pixel) in dest_buffer.iter_mut().zip(source_pixels) {
+            let b = src_pixel[0] as u32;
+            let g = src_pixel[1] as u32;
+            let r = src_pixel[2] as u32;
+            // let a = src_pixel[3] as u32; // softbufferはAlphaに対応していない。
 
-                // Alpha of BGRA
-                buffer = buffer.add(1);
-                let alpha = buffer.read() as u32;
-
-                // 次は青なので、一回インクリメントする。
-                buffer = buffer.add(1);
-
-                (buffer, (blue, green, red, alpha))
-            }
+            // 0RGBに再配置。
+            *dest_pixel = (r << 16) | (g << 8) | b;
         }
 
-        let mut source_buffer = unsafe { NonNull::new_unchecked(source_buffer as _) };
-        let (mut b, mut g, mut r);
-
-        for i in 0..(width * height) {
-            (source_buffer, (b, g, r, _)) = unsafe { unpack_bgra(source_buffer) };
-
-            dest_buffer[i as usize] = b | (g << 8) | (r << 16);
-        }
-
+        // ウィンドウに描画依頼。
         dest_buffer.present().unwrap();
     }
 }
