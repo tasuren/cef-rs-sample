@@ -2,9 +2,7 @@ use std::{cell::RefCell, rc::Rc};
 
 use cef::*;
 use winit::{
-    application::ApplicationHandler,
-    dpi::{LogicalSize, PhysicalSize},
-    event::WindowEvent,
+    application::ApplicationHandler, dpi::PhysicalSize, event::WindowEvent,
     window::WindowAttributes,
 };
 
