@@ -25,8 +25,6 @@ impl ApplicationHandler for SampleWindowApp {
         let window_info = WindowInfo {
             // CEFにウィンドウを作らせないために必要。
             windowless_rendering_enabled: true as _,
-            // 描画後の描画データを`on_paint`で受け取るのに必要。
-            shared_texture_enabled: true as _,
             // こちら側から、再描画を指示できるよう設定。
             external_begin_frame_enabled: true as _,
             ..Default::default()
@@ -38,7 +36,9 @@ impl ApplicationHandler for SampleWindowApp {
         let render_handler = SampleRenderHandler::new_render_handler(size, scale_factor as _);
 
         let browser_settings = BrowserSettings {
-            windowless_frame_rate: 30,
+            // `external_begin_frame_enabled`を使うと無視されるなんて話も。
+            // https://github.com/daktronics/cef-mixer/blob/fc290b56a1b84554ee1ec9860d12563c9810d5e1/src/web_layer.cpp#L1172-L1178
+            windowless_frame_rate: 60,
             ..Default::default()
         };
         let mut context = cef::request_context_create_context(
@@ -52,7 +52,7 @@ impl ApplicationHandler for SampleWindowApp {
             Some(&"https://www.google.com/".into()),
             Some(&browser_settings),
             None,
-            context.as_mut(),
+            None,
         );
         if browser.is_none() {
             panic!("ブラウザの起動に失敗しました。");
@@ -95,9 +95,10 @@ impl SampleWindowApp {
     fn redraw(&self) {
         // 再描画が要求されてるので、新しいフレームの描画をCEFに要求する。
         if let Some(host) = self.browser().host() {
-            println!("external");
             host.send_external_begin_frame();
         }
+
+        self.window().request_redraw();
     }
 
     fn resize(&self, size: LogicalSize<u32>) {
