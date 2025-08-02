@@ -2,7 +2,10 @@ use std::{cell::RefCell, rc::Rc};
 
 use cef::*;
 use winit::{
-    application::ApplicationHandler, dpi::LogicalSize, event::WindowEvent, window::WindowAttributes,
+    application::ApplicationHandler,
+    dpi::{LogicalSize, PhysicalSize},
+    event::WindowEvent,
+    window::WindowAttributes,
 };
 
 use crate::*;
@@ -10,7 +13,7 @@ use crate::*;
 #[derive(Default)]
 pub struct SampleWindowApp {
     browser: Option<Browser>,
-    window: Option<winit::window::Window>,
+    window: Option<ViewWindow>,
     size: ViewSize,
 }
 
@@ -20,6 +23,7 @@ impl ApplicationHandler for SampleWindowApp {
         let window = event_loop
             .create_window(WindowAttributes::default())
             .unwrap();
+        let window = Rc::new(window);
 
         // 作ったウィンドウをCEFで使う準備として、レンダリング関連の設定を用意。
         let window_info = WindowInfo {
@@ -31,9 +35,10 @@ impl ApplicationHandler for SampleWindowApp {
         };
 
         let scale_factor = window.scale_factor();
-        let size = Rc::new(RefCell::new(window.inner_size().to_logical(scale_factor)));
+        let size = Rc::new(RefCell::new(window.inner_size()));
         self.size = Rc::clone(&size);
-        let render_handler = SampleRenderHandler::new_render_handler(size, scale_factor as _);
+        let render_handler =
+            SampleRenderHandler::new_render_handler(Rc::clone(&window), size, scale_factor as _);
 
         let browser_settings = BrowserSettings {
             // `external_begin_frame_enabled`を使うと無視されるなんて話も。
@@ -52,7 +57,7 @@ impl ApplicationHandler for SampleWindowApp {
             Some(&"https://www.google.com/".into()),
             Some(&browser_settings),
             None,
-            None,
+            context.as_mut(),
         );
         if browser.is_none() {
             panic!("ブラウザの起動に失敗しました。");
@@ -73,9 +78,7 @@ impl ApplicationHandler for SampleWindowApp {
         match event {
             WindowEvent::CloseRequested => event_loop.exit(),
             WindowEvent::RedrawRequested => self.redraw(),
-            WindowEvent::Resized(size) => {
-                self.resize(size.to_logical(self.window().scale_factor()))
-            }
+            WindowEvent::Resized(size) => self.resize(size),
             _ => (),
         }
     }
@@ -93,7 +96,8 @@ impl SampleWindowApp {
     }
 
     fn redraw(&self) {
-        // 再描画が要求されてるので、新しいフレームの描画をCEFに要求する。
+        // 再描画は自分で繰り返さなければならない？
+
         if let Some(host) = self.browser().host() {
             host.send_external_begin_frame();
         }
@@ -101,7 +105,7 @@ impl SampleWindowApp {
         self.window().request_redraw();
     }
 
-    fn resize(&self, size: LogicalSize<u32>) {
+    fn resize(&self, size: PhysicalSize<u32>) {
         *self.size.borrow_mut() = size;
 
         // 可能であれば、CEFにウィンドウサイズが変更されたことを通知する。
