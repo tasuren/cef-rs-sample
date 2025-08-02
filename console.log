@@ -1,0 +1,102 @@
+Level: Info
+Message: [Report Only] Refused to load the script 'https://www.google.com/recaptcha/api.js' because it violates the following Content Security Policy directive: "script-src 'none'". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback.
+
+Source: https://www.google.com/sorry/index?continue=https://www.google.com/search%3Fq%3DChrome%2B%25E6%258B%25A1%25E5%25BC%25B5%25E6%25A9%259F%25E8%2583%25BD%26sca_esv%3D2f12b1eb9104a50d%26source%3Dhp%26ei%3Di2GNaKWVFYGLvr0P_fWs4Qw%26iflsig%3DAOw8s4IAAAAAaI1vmzVigfB6ChdbPYrJ13U5IZ5UXol7%26ved%3D0ahUKEwjlhqLt9OqOAxWBha8BHf06K8wQ4dUDCA8%26uact%3D5%26oq%3DChrome%2B%25E6%258B%25A1%25E5%25BC%25B5%25E6%25A9%259F%25E8%2583%25BD%26gs_lp%3DEgdnd3Mtd2l6IhNDaHJvbWUg5ouh5by15qmf6IO9MggQABiABBixAzILEAAYgAQYsQMYgwEyBRAAGIAEMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABEjiQ1CMBliOQXACeACQAQCYAWGgAcgNqgECMjK4AQPIAQD4AQGYAhigAo4OqAIKwgIKEAAYAxjqAhiPAcICDRAAGIAEGLEDGIMBGATCAhAQABiABBixAxiDARgEGIoFwgIHEAAYgAQYBMICChAAGIAEGLEDGASYAwnxBVqQjIFgnicFkgcCMjSgB55RsgcCMjK4B4AOwgcGMC4yMi4yyAc1%26sclient%3Dgws-wiz%26sei%3Dm2GNaNr-C6_i1e8P2ZHaoAM&q=EhAgAQ9xqaBCAM2CbxGGR1cbGJvDtcQGIjCHsYvx3_VZ41R27Ce6JGZFfqQdOw-vn-04NnHihC_ewVgYp4k7i-3jmJh0uX5M4EoyAVJaAUM
+Line: 0
+-----------------------
+Level: Info
+Message: [Report Only] Refused to execute inline script because it violates the following Content Security Policy directive: "script-src 'none'". Either the 'unsafe-inline' keyword, a hash ('sha256-B2jAL3UepSoKXTWUKX0TKbbBzz+Oa17xwlXntLPpfOs='), or a nonce ('nonce-...') is required to enable inline execution.
+
+Source: https://www.google.com/sorry/index?continue=https://www.google.com/search%3Fq%3DChrome%2B%25E6%258B%25A1%25E5%25BC%25B5%25E6%25A9%259F%25E8%2583%25BD%26sca_esv%3D2f12b1eb9104a50d%26source%3Dhp%26ei%3Di2GNaKWVFYGLvr0P_fWs4Qw%26iflsig%3DAOw8s4IAAAAAaI1vmzVigfB6ChdbPYrJ13U5IZ5UXol7%26ved%3D0ahUKEwjlhqLt9OqOAxWBha8BHf06K8wQ4dUDCA8%26uact%3D5%26oq%3DChrome%2B%25E6%258B%25A1%25E5%25BC%25B5%25E6%25A9%259F%25E8%2583%25BD%26gs_lp%3DEgdnd3Mtd2l6IhNDaHJvbWUg5ouh5by15qmf6IO9MggQABiABBixAzILEAAYgAQYsQMYgwEyBRAAGIAEMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABEjiQ1CMBliOQXACeACQAQCYAWGgAcgNqgECMjK4AQPIAQD4AQGYAhigAo4OqAIKwgIKEAAYAxjqAhiPAcICDRAAGIAEGLEDGIMBGATCAhAQABiABBixAxiDARgEGIoFwgIHEAAYgAQYBMICChAAGIAEGLEDGASYAwnxBVqQjIFgnicFkgcCMjSgB55RsgcCMjK4B4AOwgcGMC4yMi4yyAc1%26sclient%3Dgws-wiz%26sei%3Dm2GNaNr-C6_i1e8P2ZHaoAM&q=EhAgAQ9xqaBCAM2CbxGGR1cbGJvDtcQGIjCHsYvx3_VZ41R27Ce6JGZFfqQdOw-vn-04NnHihC_ewVgYp4k7i-3jmJh0uX5M4EoyAVJaAUM
+Line: 14
+-----------------------
+Level: Info
+Message: [Report Only] Refused to load the script 'https://www.gstatic.com/recaptcha/releases/DBIsSQ0s2djD_akThoRUDeHa/recaptcha__en.js' because it violates the following Content Security Policy directive: "script-src 'none'". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback.
+
+Source: https://www.google.com/recaptcha/api.js
+Line: 1
+-----------------------
+Level: Error
+Message: [Report Only] Refused to frame 'https://www.google.com/recaptcha/api2/anchor?ar=1&k=6LdLLIMbAAAAAIl-KLj9p1ePhM-4LCCDbjtJLqRO&co=aHR0cHM6Ly93d3cuZ29vZ2xlLmNvbTo0NDM.&hl=en&v=DBIsSQ0s2djD_akThoRUDeHa&size=normal&s=61raj64cICFy6QE3pkHzN5814JOqffXv-kBrkMRtGeRJ4_YVtGG-9o8BHOatYfD2lJG_AthLasuu3HFX1t4BqO8smqA9J9ze1U8A1dVEio5f0YbK8STuBNZYMHkzn-zg61xyUHHlilWyleokKLBJP1aaf5BN1Lkt_Qlw2nQ7w6kBtBM42BYdhglMDOAOaIf-tflS3FAp7Gf_Cr_Yoy2MSBiOfcrt2w0t5WVmb26ap0uKuMqE8QISWAnN5O4gQc3JXak-xGhbUZ_VdjRS_1JxWfC97KoT2gs&anchor-ms=20000&execute-ms=15000&cb=bumartrlhkuo' because it violates the following Content Security Policy directive: "frame-src 'none'".
+
+Source: https://www.gstatic.com/
+Line: 0
+-----------------------
+Level: Error
+Message: [Report Only] Refused to frame 'https://www.google.com/recaptcha/api2/anchor?ar=1&k=6LdLLIMbAAAAAIl-KLj9p1ePhM-4LCCDbjtJLqRO&co=aHR0cHM6Ly93d3cuZ29vZ2xlLmNvbTo0NDM.&hl=en&v=DBIsSQ0s2djD_akThoRUDeHa&size=normal&s=61raj64cICFy6QE3pkHzN5814JOqffXv-kBrkMRtGeRJ4_YVtGG-9o8BHOatYfD2lJG_AthLasuu3HFX1t4BqO8smqA9J9ze1U8A1dVEio5f0YbK8STuBNZYMHkzn-zg61xyUHHlilWyleokKLBJP1aaf5BN1Lkt_Qlw2nQ7w6kBtBM42BYdhglMDOAOaIf-tflS3FAp7Gf_Cr_Yoy2MSBiOfcrt2w0t5WVmb26ap0uKuMqE8QISWAnN5O4gQc3JXak-xGhbUZ_VdjRS_1JxWfC97KoT2gs&anchor-ms=20000&execute-ms=15000&cb=bumartrlhkuo' because it violates the following Content Security Policy directive: "frame-src 'none'".
+
+Source: https://www.gstatic.com/
+Line: 0
+-----------------------
+Level: Warn
+Message: An iframe which has both allow-scripts and allow-same-origin for its sandbox attribute can escape its sandboxing.
+Source: https://www.google.com/recaptcha/api2/anchor?ar=1&k=6LdLLIMbAAAAAIl-KLj9p1ePhM-4LCCDbjtJLqRO&co=aHR0cHM6Ly93d3cuZ29vZ2xlLmNvbTo0NDM.&hl=en&v=DBIsSQ0s2djD_akThoRUDeHa&size=normal&s=61raj64cICFy6QE3pkHzN5814JOqffXv-kBrkMRtGeRJ4_YVtGG-9o8BHOatYfD2lJG_AthLasuu3HFX1t4BqO8smqA9J9ze1U8A1dVEio5f0YbK8STuBNZYMHkzn-zg61xyUHHlilWyleokKLBJP1aaf5BN1Lkt_Qlw2nQ7w6kBtBM42BYdhglMDOAOaIf-tflS3FAp7Gf_Cr_Yoy2MSBiOfcrt2w0t5WVmb26ap0uKuMqE8QISWAnN5O4gQc3JXak-xGhbUZ_VdjRS_1JxWfC97KoT2gs&anchor-ms=20000&execute-ms=15000&cb=bumartrlhkuo
+Line: 0
+-----------------------
+Level: Info
+Message: [Report Only] Refused to execute inline event handler because it violates the following Content Security Policy directive: "script-src 'none'". Either the 'unsafe-inline' keyword, a hash ('sha256-...'), or a nonce ('nonce-...') is required to enable inline execution. Note that hashes do not apply to event handlers, style attributes and javascript: navigations unless the 'unsafe-hashes' keyword is present.
+
+Source: https://www.google.com/sorry/index?continue=https://www.google.com/search%3Fq%3DChrome%2B%25E6%258B%25A1%25E5%25BC%25B5%25E6%25A9%259F%25E8%2583%25BD%26sca_esv%3D2f12b1eb9104a50d%26source%3Dhp%26ei%3Di2GNaKWVFYGLvr0P_fWs4Qw%26iflsig%3DAOw8s4IAAAAAaI1vmzVigfB6ChdbPYrJ13U5IZ5UXol7%26ved%3D0ahUKEwjlhqLt9OqOAxWBha8BHf06K8wQ4dUDCA8%26uact%3D5%26oq%3DChrome%2B%25E6%258B%25A1%25E5%25BC%25B5%25E6%25A9%259F%25E8%2583%25BD%26gs_lp%3DEgdnd3Mtd2l6IhNDaHJvbWUg5ouh5by15qmf6IO9MggQABiABBixAzILEAAYgAQYsQMYgwEyBRAAGIAEMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABEjiQ1CMBliOQXACeACQAQCYAWGgAcgNqgECMjK4AQPIAQD4AQGYAhigAo4OqAIKwgIKEAAYAxjqAhiPAcICDRAAGIAEGLEDGIMBGATCAhAQABiABBixAxiDARgEGIoFwgIHEAAYgAQYBMICChAAGIAEGLEDGASYAwnxBVqQjIFgnicFkgcCMjSgB55RsgcCMjK4B4AOwgcGMC4yMi4yyAc1%26sclient%3Dgws-wiz%26sei%3Dm2GNaNr-C6_i1e8P2ZHaoAM&q=EhAgAQ9xqaBCAM2CbxGGR1cbGJvDtcQGIjCHsYvx3_VZ41R27Ce6JGZFfqQdOw-vn-04NnHihC_ewVgYp4k7i-3jmJh0uX5M4EoyAVJaAUM
+Line: 4
+-----------------------
+Level: Error
+Message: Uncaught ReferenceError: solveSimpleChallenge is not defined
+Source: https://www.google.com/sorry/index?continue=https://www.google.com/search%3Fq%3DChrome%2B%25E6%258B%25A1%25E5%25BC%25B5%25E6%25A9%259F%25E8%2583%25BD%26sca_esv%3D2f12b1eb9104a50d%26source%3Dhp%26ei%3Di2GNaKWVFYGLvr0P_fWs4Qw%26iflsig%3DAOw8s4IAAAAAaI1vmzVigfB6ChdbPYrJ13U5IZ5UXol7%26ved%3D0ahUKEwjlhqLt9OqOAxWBha8BHf06K8wQ4dUDCA8%26uact%3D5%26oq%3DChrome%2B%25E6%258B%25A1%25E5%25BC%25B5%25E6%25A9%259F%25E8%2583%25BD%26gs_lp%3DEgdnd3Mtd2l6IhNDaHJvbWUg5ouh5by15qmf6IO9MggQABiABBixAzILEAAYgAQYsQMYgwEyBRAAGIAEMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABEjiQ1CMBliOQXACeACQAQCYAWGgAcgNqgECMjK4AQPIAQD4AQGYAhigAo4OqAIKwgIKEAAYAxjqAhiPAcICDRAAGIAEGLEDGIMBGATCAhAQABiABBixAxiDARgEGIoFwgIHEAAYgAQYBMICChAAGIAEGLEDGASYAwnxBVqQjIFgnicFkgcCMjSgB55RsgcCMjK4B4AOwgcGMC4yMi4yyAc1%26sclient%3Dgws-wiz%26sei%3Dm2GNaNr-C6_i1e8P2ZHaoAM&q=EhAgAQ9xqaBCAM2CbxGGR1cbGJvDtcQGIjCHsYvx3_VZ41R27Ce6JGZFfqQdOw-vn-04NnHihC_ewVgYp4k7i-3jmJh0uX5M4EoyAVJaAUM
+Line: 4
+-----------------------
+Level: Error
+Message: [Report Only] Refused to frame 'https://www.google.com/recaptcha/api2/bframe?hl=en&v=DBIsSQ0s2djD_akThoRUDeHa&k=6LdLLIMbAAAAAIl-KLj9p1ePhM-4LCCDbjtJLqRO' because it violates the following Content Security Policy directive: "frame-src 'none'".
+
+Source: https://www.gstatic.com/
+Line: 0
+-----------------------
+Level: Error
+Message: [Report Only] Refused to frame 'https://www.google.com/recaptcha/api2/bframe?hl=en&v=DBIsSQ0s2djD_akThoRUDeHa&k=6LdLLIMbAAAAAIl-KLj9p1ePhM-4LCCDbjtJLqRO' because it violates the following Content Security Policy directive: "frame-src 'none'".
+
+Source: https://www.gstatic.com/
+Line: 0
+-----------------------
+Level: Warn
+Message: An iframe which has both allow-scripts and allow-same-origin for its sandbox attribute can escape its sandboxing.
+Source: https://www.google.com/recaptcha/api2/bframe?hl=en&v=DBIsSQ0s2djD_akThoRUDeHa&k=6LdLLIMbAAAAAIl-KLj9p1ePhM-4LCCDbjtJLqRO
+Line: 0
+-----------------------
+Level: Error
+Message: [Report Only] Refused to send form data to 'https://www.google.com/sorry/index' because it violates the following Content Security Policy directive: "form-action 'none'".
+
+Source: https://www.google.com/sorry/index?continue=https://www.google.com/search%3Fq%3DChrome%2B%25E6%258B%25A1%25E5%25BC%25B5%25E6%25A9%259F%25E8%2583%25BD%26sca_esv%3D2f12b1eb9104a50d%26source%3Dhp%26ei%3Di2GNaKWVFYGLvr0P_fWs4Qw%26iflsig%3DAOw8s4IAAAAAaI1vmzVigfB6ChdbPYrJ13U5IZ5UXol7%26ved%3D0ahUKEwjlhqLt9OqOAxWBha8BHf06K8wQ4dUDCA8%26uact%3D5%26oq%3DChrome%2B%25E6%258B%25A1%25E5%25BC%25B5%25E6%25A9%259F%25E8%2583%25BD%26gs_lp%3DEgdnd3Mtd2l6IhNDaHJvbWUg5ouh5by15qmf6IO9MggQABiABBixAzILEAAYgAQYsQMYgwEyBRAAGIAEMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABEjiQ1CMBliOQXACeACQAQCYAWGgAcgNqgECMjK4AQPIAQD4AQGYAhigAo4OqAIKwgIKEAAYAxjqAhiPAcICDRAAGIAEGLEDGIMBGATCAhAQABiABBixAxiDARgEGIoFwgIHEAAYgAQYBMICChAAGIAEGLEDGASYAwnxBVqQjIFgnicFkgcCMjSgB55RsgcCMjK4B4AOwgcGMC4yMi4yyAc1%26sclient%3Dgws-wiz%26sei%3Dm2GNaNr-C6_i1e8P2ZHaoAM&q=EhAgAQ9xqaBCAM2CbxGGR1cbGJvDtcQGIjCHsYvx3_VZ41R27Ce6JGZFfqQdOw-vn-04NnHihC_ewVgYp4k7i-3jmJh0uX5M4EoyAVJaAUM
+Line: 14
+-----------------------
+Level: Error
+Message: [Report Only] Refused to send form data to 'https://www.google.com/sorry/index' because it violates the following Content Security Policy directive: "form-action 'none'".
+
+Source: https://www.google.com/sorry/index?continue=https://www.google.com/search%3Fq%3DChrome%2B%25E6%258B%25A1%25E5%25BC%25B5%25E6%25A9%259F%25E8%2583%25BD%26sca_esv%3D2f12b1eb9104a50d%26source%3Dhp%26ei%3Di2GNaKWVFYGLvr0P_fWs4Qw%26iflsig%3DAOw8s4IAAAAAaI1vmzVigfB6ChdbPYrJ13U5IZ5UXol7%26ved%3D0ahUKEwjlhqLt9OqOAxWBha8BHf06K8wQ4dUDCA8%26uact%3D5%26oq%3DChrome%2B%25E6%258B%25A1%25E5%25BC%25B5%25E6%25A9%259F%25E8%2583%25BD%26gs_lp%3DEgdnd3Mtd2l6IhNDaHJvbWUg5ouh5by15qmf6IO9MggQABiABBixAzILEAAYgAQYsQMYgwEyBRAAGIAEMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABEjiQ1CMBliOQXACeACQAQCYAWGgAcgNqgECMjK4AQPIAQD4AQGYAhigAo4OqAIKwgIKEAAYAxjqAhiPAcICDRAAGIAEGLEDGIMBGATCAhAQABiABBixAxiDARgEGIoFwgIHEAAYgAQYBMICChAAGIAEGLEDGASYAwnxBVqQjIFgnicFkgcCMjSgB55RsgcCMjK4B4AOwgcGMC4yMi4yyAc1%26sclient%3Dgws-wiz%26sei%3Dm2GNaNr-C6_i1e8P2ZHaoAM&q=EhAgAQ9xqaBCAM2CbxGGR1cbGJvDtcQGIjCHsYvx3_VZ41R27Ce6JGZFfqQdOw-vn-04NnHihC_ewVgYp4k7i-3jmJh0uX5M4EoyAVJaAUM
+Line: 14
+-----------------------
+Level: Error
+Message: [Report Only] Refused to send form data to 'https://www.google.com/sorry/index' because it violates the following Content Security Policy directive: "form-action 'none'".
+
+Source: https://www.google.com/sorry/index?continue=https://www.google.com/search%3Fq%3DChrome%2B%25E6%258B%25A1%25E5%25BC%25B5%25E6%25A9%259F%25E8%2583%25BD%26sca_esv%3D2f12b1eb9104a50d%26source%3Dhp%26ei%3Di2GNaKWVFYGLvr0P_fWs4Qw%26iflsig%3DAOw8s4IAAAAAaI1vmzVigfB6ChdbPYrJ13U5IZ5UXol7%26ved%3D0ahUKEwjlhqLt9OqOAxWBha8BHf06K8wQ4dUDCA8%26uact%3D5%26oq%3DChrome%2B%25E6%258B%25A1%25E5%25BC%25B5%25E6%25A9%259F%25E8%2583%25BD%26gs_lp%3DEgdnd3Mtd2l6IhNDaHJvbWUg5ouh5by15qmf6IO9MggQABiABBixAzILEAAYgAQYsQMYgwEyBRAAGIAEMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABEjiQ1CMBliOQXACeACQAQCYAWGgAcgNqgECMjK4AQPIAQD4AQGYAhigAo4OqAIKwgIKEAAYAxjqAhiPAcICDRAAGIAEGLEDGIMBGATCAhAQABiABBixAxiDARgEGIoFwgIHEAAYgAQYBMICChAAGIAEGLEDGASYAwnxBVqQjIFgnicFkgcCMjSgB55RsgcCMjK4B4AOwgcGMC4yMi4yyAc1%26sclient%3Dgws-wiz%26sei%3Dm2GNaNr-C6_i1e8P2ZHaoAM&q=EhAgAQ9xqaBCAM2CbxGGR1cbGJvDtcQGIjCHsYvx3_VZ41R27Ce6JGZFfqQdOw-vn-04NnHihC_ewVgYp4k7i-3jmJh0uX5M4EoyAVJaAUM
+Line: 14
+-----------------------
+Level: Info
+Message: %c%s color: red; background: yellow; font-size: 24px; 警告:
+Source: https://www.gstatic.com/_/mss/boq-chrome-webstore/_/js/k=boq-chrome-webstore.ChromeWebStoreConsumerFeUi.ja.BF6fdTHqQu4.2018.O/am=GKqEwMAXAAQ/d=1/excm=_b,_tp,categoryview/ed=1/dg=0/wt=2/ujg=1/rs=AEP720Lsh0YGaw5JClCeuE2e4rrW6lXmwA/m=_b,_tp
+Line: 373
+-----------------------
+Level: Info
+Message: %c%s font-size: 18px; このコンソールを使用すると、Self-XSS と呼ばれる手法を使用する攻撃者が、あなたになりすまして個人情報を騙し取る可能性があります。
+動作を確認していないコードは、ここに入力したり貼り付けたりしないでください。
+Source: https://www.gstatic.com/_/mss/boq-chrome-webstore/_/js/k=boq-chrome-webstore.ChromeWebStoreConsumerFeUi.ja.BF6fdTHqQu4.2018.O/am=GKqEwMAXAAQ/d=1/excm=_b,_tp,categoryview/ed=1/dg=0/wt=2/ujg=1/rs=AEP720Lsh0YGaw5JClCeuE2e4rrW6lXmwA/m=_b,_tp
+Line: 373
+-----------------------
+Level: Error
+Message: Unchecked runtime.lastError: User cancelled install
+Source: https://chromewebstore.google.com/detail/outrun-offline-game/mbmoepkknemagccpieajeildcmlfepkh?hl=ja
+Line: 0
+-----------------------
+Level: Error
+Message: Not allowed to load local resource: chrome://settings/
+Source: 
+Line: 1
+-----------------------
