@@ -1,6 +1,8 @@
 /target
 .cargo
 
+.experimental
+
 # OS
 .DS_Store
 
