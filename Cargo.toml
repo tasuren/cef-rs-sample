@@ -1,5 +1,10 @@
 [workspace]
-members = ["crates/bundle-macos", "crates/chrome", "crates/chrome-helper"]
+members = [
+    "crates/cef-rs-osr-sample",
+    "crates/cef-rs-sample",
+    "crates/cef-rs-sample-bundle-macos",
+    "crates/cef-rs-sample-helper",
+]
 resolver = "3"
 
 [workspace.dependencies]

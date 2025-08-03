@@ -1,5 +1,5 @@
 [package]
-name = "cef-sample-chrome-helper"
+name = "cef-rs-sample-helper"
 version = "0.1.0"
 edition = "2024"
 
