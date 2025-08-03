@@ -27,8 +27,6 @@ impl ApplicationHandler for SampleWindowApp {
         let window_info = WindowInfo {
             // CEFにウィンドウを作らせないために必要。
             windowless_rendering_enabled: true as _,
-            // こちら側から、再描画を指示できるよう設定。
-            external_begin_frame_enabled: true as _,
             ..Default::default()
         };
 
@@ -49,10 +47,14 @@ impl ApplicationHandler for SampleWindowApp {
             Some(&mut SampleRequestContextHandler::new_request_context_handler()),
         );
 
+        let url = std::env::var("URL")
+            .ok()
+            .unwrap_or_else(|| "https://bevy.org/examples/3d-rendering/motion-blur/".to_owned());
+
         let browser = cef::browser_host_create_browser_sync(
             Some(&window_info),
             Some(&mut SampleClient::new_client(render_handler)),
-            Some(&"https://www.google.com/".into()),
+            Some(&url.as_str().into()),
             Some(&browser_settings),
             None,
             context.as_mut(),
@@ -75,7 +77,6 @@ impl ApplicationHandler for SampleWindowApp {
     ) {
         match event {
             WindowEvent::CloseRequested => event_loop.exit(),
-            WindowEvent::RedrawRequested => self.redraw(),
             WindowEvent::Resized(size) => self.resize(size),
             _ => (),
         }
@@ -87,20 +88,6 @@ impl SampleWindowApp {
         self.browser
             .as_ref()
             .expect("Browser is not initialized yet")
-    }
-
-    fn window(&self) -> &winit::window::Window {
-        self.window.as_ref().expect("Window is not initialized yet")
-    }
-
-    fn redraw(&self) {
-        // 再描画は自分で繰り返さなければならない？
-
-        if let Some(host) = self.browser().host() {
-            host.send_external_begin_frame();
-        }
-
-        self.window().request_redraw();
     }
 
     fn resize(&self, size: PhysicalSize<u32>) {
