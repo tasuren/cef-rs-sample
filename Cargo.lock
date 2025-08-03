@@ -288,16 +288,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "cef-sample-bundle-macos"
-version = "0.1.0"
-dependencies = [
- "cef",
- "plist",
- "serde",
-]
-
-[[package]]
-name = "cef-sample-chrome"
+name = "cef-rs-osr-sample"
 version = "0.1.0"
 dependencies = [
  "cef",
@@ -307,7 +298,24 @@ dependencies = [
 ]
 
 [[package]]
-name = "cef-sample-chrome-helper"
+name = "cef-rs-sample"
+version = "0.1.0"
+dependencies = [
+ "cef",
+ "objc2 0.6.1",
+]
+
+[[package]]
+name = "cef-rs-sample-bundle-macos"
+version = "0.1.0"
+dependencies = [
+ "cef",
+ "plist",
+ "serde",
+]
+
+[[package]]
+name = "cef-rs-sample-helper"
 version = "0.1.0"
 dependencies = [
  "cef",

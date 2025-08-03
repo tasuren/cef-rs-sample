@@ -1,12 +1,10 @@
 [package]
-name = "cef-sample-chrome"
+name = "cef-rs-sample"
 version = "0.1.0"
 edition = "2024"
 
 [dependencies]
 cef = { workspace = true }
-softbuffer = "0.4.6"
-winit = "0.30.12"
 
 [target.'cfg(target_os = "macos")'.dependencies]
 objc2 = "0.6.1"

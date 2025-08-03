@@ -1,5 +1,5 @@
 [package]
-name = "cef-sample-bundle-macos"
+name = "cef-rs-sample-bundle-macos"
 version = "0.1.0"
 edition = "2024"
 

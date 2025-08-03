@@ -53,11 +53,11 @@ mod mac {
     const RESOURCES_PATH: &str = "Contents/Resources";
     const FRAMEWORK: &str = "Chromium Embedded Framework.framework";
     const HELPERS: &[&str] = &[
-        "cef-sample-chrome Helper (GPU)",
-        "cef-sample-chrome Helper (Renderer)",
-        "cef-sample-chrome Helper (Plugin)",
-        "cef-sample-chrome Helper (Alerts)",
-        "cef-sample-chrome Helper",
+        "Helper (GPU)",
+        "Helper (Renderer)",
+        "Helper (Plugin)",
+        "Helper (Alerts)",
+        "Helper",
     ];
 
     fn create_app_layout(app_path: &Path) -> PathBuf {
@@ -67,33 +67,33 @@ mod mac {
         app_path.join("Contents")
     }
 
-    fn create_app(app_path: &Path, exec_name: &str, bin: &Path) -> PathBuf {
+    fn create_app(app_path: &Path, exec_name: &str, bin: &Path, package: &str) -> PathBuf {
         let app_path = app_path.join(exec_name).with_extension("app");
         let contents_path = create_app_layout(&app_path);
-        create_info_plist(&contents_path, exec_name).unwrap();
+        create_info_plist(&contents_path, exec_name, package).unwrap();
         fs::copy(bin, app_path.join(EXEC_PATH).join(exec_name)).unwrap();
         app_path
     }
 
     // See https://bitbucket.org/chromiumembedded/cef/wiki/GeneralUsage.md#markdown-header-macos
-    fn bundle(app_path: &Path) {
+    fn bundle(app_path: &Path, package: &str) {
         let example_path = PathBuf::from(app_path);
-        let main_app_path = create_app(
-            app_path,
-            "cef-sample-chrome",
-            &example_path.join("cef-sample-chrome"),
-        );
+        let main_app_path = create_app(app_path, package, &example_path.join(package), package);
+
         let cef_path = cef::sys::get_cef_dir().unwrap();
+
         let to = main_app_path.join(FRAMEWORKS_PATH).join(FRAMEWORK);
         if to.exists() {
             fs::remove_dir_all(&to).unwrap();
         }
         copy_directory(&cef_path.join(FRAMEWORK), &to);
+
         HELPERS.iter().for_each(|helper| {
             create_app(
                 &main_app_path.join(FRAMEWORKS_PATH),
-                helper,
-                &example_path.join("cef-sample-chrome-helper"),
+                &format!("{package} {helper}"),
+                &example_path.join("cef-rs-sample-helper"),
+                package,
             );
         });
     }
@@ -101,14 +101,15 @@ mod mac {
     fn create_info_plist(
         contents_path: &Path,
         exec_name: &str,
+        package: &str,
     ) -> Result<(), Box<dyn std::error::Error>> {
         let info_plist = InfoPlist {
             cf_bundle_development_region: "en".to_string(),
             cf_bundle_display_name: exec_name.to_string(),
             cf_bundle_executable: exec_name.to_string(),
-            cf_bundle_identifier: "org.cef-rs.cefsimple.helper".to_string(),
+            cf_bundle_identifier: format!("jp.tasuren.{package}.helper"),
             cf_bundle_info_dictionary_version: "6.0".to_string(),
-            cf_bundle_name: "cef-rs".to_string(),
+            cf_bundle_name: package.to_owned(),
             cf_bundle_package_type: "APPL".to_string(),
             cf_bundle_signature: "????".to_string(),
             cf_bundle_version: "1.0.0".to_string(),
@@ -157,11 +158,11 @@ mod mac {
         Ok(())
     }
 
-    pub fn main() -> Result<(), Box<dyn std::error::Error>> {
+    pub fn main(package: &str) -> Result<(), Box<dyn std::error::Error>> {
         let app_path = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../target/debug");
-        run_command(&["build", "--package", "cef-sample-chrome"])?;
-        run_command(&["build", "--package", "cef-sample-chrome-helper"])?;
-        bundle(&app_path);
+        run_command(&["build", "--package", package])?;
+        run_command(&["build", "--package", "cef-rs-sample-helper"])?;
+        bundle(&app_path, package);
         Ok(())
     }
 }
@@ -170,25 +171,33 @@ mod mac {
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut run_flag = false;
     let mut build_flag = true;
+    let mut osr_flag = false;
 
     for arg in std::env::args() {
         match arg.as_str() {
             "--run" => run_flag = true,
             "--no-build" => build_flag = false,
+            "--osr" => osr_flag = true,
             _ => {}
         }
     }
 
+    let package = if osr_flag {
+        "cef-rs-osr-sample"
+    } else {
+        "cef-rs-sample"
+    };
+
     if build_flag {
-        mac::main()?;
+        mac::main(package)?;
     }
 
     if run_flag {
         use std::process::Stdio;
 
-        let status = std::process::Command::new(
-            "./target/debug/cef-sample-chrome.app/Contents/MacOS/cef-sample-chrome",
-        )
+        let status = std::process::Command::new(format!(
+            "./target/debug/{package}.app/Contents/MacOS/{package}"
+        ))
         .stdout(Stdio::inherit())
         .stderr(Stdio::inherit())
         .status()?;
