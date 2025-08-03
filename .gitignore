@@ -2,6 +2,7 @@
 .cargo
 
 .experimental
+console.log
 
 # OS
 .DS_Store
