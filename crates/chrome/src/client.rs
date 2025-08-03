@@ -1,4 +1,7 @@
-use cef::{rc::*, *};
+use cef::{
+    Client, ImplClient, RenderHandler, WrapClient,
+    rc::{Rc as _, RcImpl},
+};
 
 pub struct SampleClient {
     object: *mut RcImpl<cef::sys::_cef_client_t, Self>,
@@ -35,7 +38,7 @@ impl Clone for SampleClient {
     }
 }
 
-impl Rc for SampleClient {
+impl cef::rc::Rc for SampleClient {
     fn as_base(&self) -> &cef::sys::cef_base_ref_counted_t {
         unsafe {
             let base = &*self.object;
@@ -50,6 +53,7 @@ impl ImplClient for SampleClient {
     }
 
     fn render_handler(&self) -> Option<RenderHandler> {
+        // softbufferを使ってウィンドウに描画する`RenderHandler`を使ってもらう。
         Some(self.render_handler.clone())
     }
 }

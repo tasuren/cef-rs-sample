@@ -1,5 +1,4 @@
 use cef::{args::Args, *};
-use std::sync::{Arc, Mutex};
 use winit::{
     event_loop::{ControlFlow, EventLoop},
     platform::pump_events::{EventLoopExtPumpEvents, PumpStatus},
@@ -36,8 +35,7 @@ fn main() -> std::process::ExitCode {
     let switch = CefString::from("type");
     let is_browser_process = cmd.has_switch(Some(&switch)) != 1;
 
-    let window = Arc::new(Mutex::new(None));
-    let mut app = SampleApp::new_app(window.clone());
+    let mut app = SampleApp::new_app();
 
     let ret = execute_process(
         Some(args.as_main_args()),

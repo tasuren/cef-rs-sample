@@ -1,24 +1,21 @@
-use std::sync::{Arc, Mutex};
-
-use cef::{rc::*, *};
+use cef::{
+    BrowserProcessHandler, CommandLine, ImplBrowserProcessHandler, ImplCommandLine,
+    WrapBrowserProcessHandler, rc::Rc as _,
+};
 
 pub struct SampleBrowserProcessHandler {
-    object: *mut RcImpl<cef::sys::cef_browser_process_handler_t, Self>,
-    window: Arc<Mutex<Option<Window>>>,
+    object: *mut cef::rc::RcImpl<cef::sys::cef_browser_process_handler_t, Self>,
 }
 
 impl SampleBrowserProcessHandler {
-    pub fn new_browser_process_handler(
-        window: Arc<Mutex<Option<Window>>>,
-    ) -> BrowserProcessHandler {
+    pub fn new_browser_process_handler() -> BrowserProcessHandler {
         BrowserProcessHandler::new(Self {
             object: std::ptr::null_mut(),
-            window,
         })
     }
 }
 
-impl Rc for SampleBrowserProcessHandler {
+impl cef::rc::Rc for SampleBrowserProcessHandler {
     fn as_base(&self) -> &cef::sys::cef_base_ref_counted_t {
         unsafe {
             let base = &*self.object;
@@ -28,7 +25,10 @@ impl Rc for SampleBrowserProcessHandler {
 }
 
 impl WrapBrowserProcessHandler for SampleBrowserProcessHandler {
-    fn wrap_rc(&mut self, object: *mut RcImpl<cef::sys::_cef_browser_process_handler_t, Self>) {
+    fn wrap_rc(
+        &mut self,
+        object: *mut cef::rc::RcImpl<cef::sys::_cef_browser_process_handler_t, Self>,
+    ) {
         self.object = object;
     }
 }
@@ -41,9 +41,7 @@ impl Clone for SampleBrowserProcessHandler {
             rc_impl
         };
 
-        let window = self.window.clone();
-
-        Self { object, window }
+        Self { object }
     }
 }
 
@@ -58,8 +56,9 @@ impl ImplBrowserProcessHandler for SampleBrowserProcessHandler {
         }
     }
 
-    // The real lifespan of cef starts from `on_context_initialized`, so all the cef objects should be manipulated after that.
     fn on_context_initialized(&self) {
         println!("cef context intiialized");
     }
+
+    //fn on_schedule_message_pump_work(&self, delay_ms: i64) {}
 }

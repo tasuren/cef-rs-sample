@@ -1,13 +1,17 @@
 use std::{cell::RefCell, num::NonZero};
 
-use cef::{rc::*, *};
+use cef::{
+    Browser, ImplRenderHandler, Rect, RenderHandler, ScreenInfo, WrapRenderHandler,
+    rc::{Rc as _, RcImpl},
+    sys::{_cef_base_ref_counted_t, _cef_render_handler_t},
+};
 use softbuffer::{Context, Surface};
 use winit::dpi::PhysicalSize;
 
 pub type ViewWindow = std::rc::Rc<winit::window::Window>;
 pub type ViewSize = std::rc::Rc<RefCell<PhysicalSize<u32>>>;
 
-/// softbufferを使ってOff-Screen Renderingするよう`RenderHandler`を実装した、構造体。
+/// softbufferを使ってOff-Screen Renderingするよう`RenderHandler`を実装した構造体。
 pub struct SampleRenderHandler {
     object: *mut RcImpl<cef::sys::_cef_render_handler_t, Self>,
     window: ViewWindow,
@@ -52,8 +56,8 @@ impl Clone for SampleRenderHandler {
     }
 }
 
-impl Rc for SampleRenderHandler {
-    fn as_base(&self) -> &sys::cef_base_ref_counted_t {
+impl cef::rc::Rc for SampleRenderHandler {
+    fn as_base(&self) -> &_cef_base_ref_counted_t {
         unsafe {
             let base = &*self.object;
             std::mem::transmute(&base.cef_object)
@@ -62,13 +66,13 @@ impl Rc for SampleRenderHandler {
 }
 
 impl WrapRenderHandler for SampleRenderHandler {
-    fn wrap_rc(&mut self, object: *mut RcImpl<sys::_cef_render_handler_t, Self>) {
+    fn wrap_rc(&mut self, object: *mut RcImpl<_cef_render_handler_t, Self>) {
         self.object = object;
     }
 }
 
 impl ImplRenderHandler for SampleRenderHandler {
-    fn get_raw(&self) -> *mut sys::_cef_render_handler_t {
+    fn get_raw(&self) -> *mut _cef_render_handler_t {
         self.object.cast()
     }
 
@@ -97,6 +101,9 @@ impl ImplRenderHandler for SampleRenderHandler {
         _browser: Option<&mut Browser>,
         screen_info: Option<&mut ScreenInfo>,
     ) -> ::std::os::raw::c_int {
+        // これを実装しない場合、恐らく物理ピクセルで計算される？
+        // でも念のため、拡大率を教えておく。
+
         if let Some(screen_info) = screen_info {
             screen_info.device_scale_factor = self.scale_factor as _;
             return true as _;
@@ -109,7 +116,7 @@ impl ImplRenderHandler for SampleRenderHandler {
     fn on_paint(
         &self,
         _browser: Option<&mut Browser>,
-        _type: PaintElementType,
+        _type: cef::PaintElementType,
         _dirty_rects_count: usize,
         _dirty_rects: Option<&Rect>,
         buffer: *const u8,
