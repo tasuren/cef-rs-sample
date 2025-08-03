@@ -1,29 +1,34 @@
-# cef-sample-rs
-[cef-rs](https://github.com/tauri-apps/cef-rs)を使って、ミニブラウザを勉強がてら作ってみる試み。
+# cef-rs-sample
+[cef-rs](https://github.com/tauri-apps/cef-rs)を使って、何かしら作ってみる試み。
 ちょっとした勉強目的なので、macOSでしか動作確認していません。
+
+ここでやったことは一部、備忘録として[このスクラップ](https://zenn.dev/tasuren/scraps/01f47381e351d1)に記録しています。
+
+## クレート一覧
+- cef-rs-sample  
+  普通にCEFを起動するだけ。Chrome Runtime Styleを使う。
+- cef-rs-osr-sample  
+  cef-rsに加え、winitとsoftbufferを用いてOff-Screen Renderingをする例。
+- cef-rs-sample-helper
+  CEFのためのヘルパー。
+- cef-rs-sample-bundle-macos
+  cef-rs-sampleかcef-rs-osr-sampleのmacOS向けアプリバンドルを作るプログラム。
+  macOSでビルドする場合、これを実行する。
 
 ## ビルド方法
 [Cargo.toml](./Cargo.toml)にあるcef-rsのバージョンがサポートするCEFを、cef-rsのリポジトリの説明を参考に`export-cef-dir`コマンドで用意してください。
-パスを通すように説明がががあると思います。環境を汚したくないなら、それは以下のように`.cargo/config.toml`に書くと良いかもしれません。
-```toml
-[env]
-CEF_PATH = { value = "パス", force = true }
-DYLD_FALLBACK_LIBRARY_PATH = { value = "パス", force = true }
+
+私はまだmacOSでしか試していないのですが、macOSなら以下のコマンドでアプリのバンドルが`./target/debug`に作成されます。
+```shell
+cargo run -p cef-rs-sample-bundle-macos
 ```
 
-私はまだmacOSでしか試していないのですが、macOSなら以下のコマンドでアプリのバンドルが作成されます。
-```
-cargo run -p cef-sample-bundle-macos
+ちなみに、以下のようにバンドル作成時に`--osr`とつけると、winitクレートとsoftbufferクレートを使ったOff-Screen Renderingをする方をビルドできます。
+```shell
+cargo run -p cef-rs-sample-bundle-macos -- --osr
 ```
 
-ターミナルでアプリを実行したいなら、実行ファイルの直接パスを指定して実行すると良いと思います。
-```
-./target/debug/cef-sample-chrome.app/Contents/MacOS/cef-sample-chrome
-```
+その他にも、`--run`で、ビルド後に自動で動かすことができます。
 
 ## 謝辞
 cef-rsとcef-rsのリポジトリにあるサンプルコードをベースに実装しています。
-
-## 元と違う点
-cef-rsのサンプルをベースに作っていますが、macではアプリを起動してもアプリアイコンがドック表示されません。
-このため、`Info.plist`の`LSUIElement`の値を0にしています。
