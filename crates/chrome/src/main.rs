@@ -18,7 +18,6 @@ pub use client::*;
 pub use render_handler::*;
 pub use request_context_handler::*;
 
-// FIXME: Rewrite this demo based on cef/tests/cefsimple
 fn main() -> std::process::ExitCode {
     #[cfg(target_os = "macos")]
     let _loader = {
