@@ -7,12 +7,14 @@ use crate::*;
 
 pub struct SampleApp {
     object: *mut RcImpl<cef::sys::_cef_app_t, Self>,
+    tx_pump: TxPump,
 }
 
 impl SampleApp {
-    pub fn new_app() -> App {
+    pub fn new_app(tx_pump: TxPump) -> App {
         App::new(Self {
             object: std::ptr::null_mut(),
+            tx_pump,
         })
     }
 }
@@ -31,7 +33,10 @@ impl Clone for SampleApp {
             rc_impl
         };
 
-        Self { object }
+        Self {
+            object,
+            tx_pump: self.tx_pump.clone(),
+        }
     }
 }
 
@@ -70,6 +75,8 @@ impl ImplApp for SampleApp {
     }
 
     fn browser_process_handler(&self) -> Option<BrowserProcessHandler> {
-        Some(SampleBrowserProcessHandler::new_browser_process_handler())
+        Some(SampleBrowserProcessHandler::new_browser_process_handler(
+            self.tx_pump.clone(),
+        ))
     }
 }
