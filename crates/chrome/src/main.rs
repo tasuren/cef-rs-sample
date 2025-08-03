@@ -88,6 +88,7 @@ fn main() -> std::process::ExitCode {
 
     let result = 'message_loop: loop {
         do_message_loop_work();
+
         let timeout = Some(std::time::Duration::ZERO);
         let status = event_loop.pump_app_events(timeout, &mut app);
 
@@ -111,10 +112,6 @@ fn main() -> std::process::ExitCode {
                 break;
             }
         }
-
-        // println!("{delay}");
-
-        // TODO: ここで待機しないようにする。`OnScheduleMessagePumpWork`を使う？
     };
 
     shutdown();

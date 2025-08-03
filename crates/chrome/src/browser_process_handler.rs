@@ -72,7 +72,7 @@ impl ImplBrowserProcessHandler for SampleBrowserProcessHandler {
     }
 
     fn on_schedule_message_pump_work(&self, delay_ms: i64) {
-        println!("1 {delay_ms}");
+        println!("on_schedule_message_pump_work: delay_ms = {delay_ms}ms");
         let _ = self.tx_pump.send(delay_ms);
     }
 }
