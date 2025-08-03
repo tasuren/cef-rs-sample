@@ -1,6 +1,6 @@
 use std::{cell::RefCell, rc::Rc};
 
-use cef::*;
+use cef::{Browser, WindowInfo};
 use winit::{
     application::ApplicationHandler, dpi::PhysicalSize, event::WindowEvent,
     window::WindowAttributes,
@@ -106,7 +106,7 @@ impl SampleWindowApp {
     fn resize(&self, size: PhysicalSize<u32>) {
         *self.size.borrow_mut() = size;
 
-        // 可能であれば、CEFにウィンドウサイズが変更されたことを通知する。
+        // CEFにウィンドウサイズが変更されたことを通知する。
         if let Some(host) = self.browser().host() {
             host.was_resized()
         }

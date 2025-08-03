@@ -1,19 +1,18 @@
-use std::sync::{Arc, Mutex};
-
-use cef::{rc::*, *};
+use cef::{
+    ImplApp, WrapApp,
+    rc::{Rc as _, RcImpl},
+};
 
 use crate::*;
 
 pub struct SampleApp {
     object: *mut RcImpl<cef::sys::_cef_app_t, Self>,
-    window: Arc<Mutex<Option<Window>>>,
 }
 
 impl SampleApp {
-    pub fn new_app(window: Arc<Mutex<Option<Window>>>) -> App {
+    pub fn new_app() -> App {
         App::new(Self {
             object: std::ptr::null_mut(),
-            window,
         })
     }
 }
@@ -31,13 +30,12 @@ impl Clone for SampleApp {
             rc_impl.interface.add_ref();
             rc_impl
         };
-        let window = self.window.clone();
 
-        Self { object, window }
+        Self { object }
     }
 }
 
-impl Rc for SampleApp {
+impl cef::rc::Rc for SampleApp {
     fn as_base(&self) -> &cef::sys::cef_base_ref_counted_t {
         unsafe {
             let base = &*self.object;
@@ -72,8 +70,6 @@ impl ImplApp for SampleApp {
     }
 
     fn browser_process_handler(&self) -> Option<BrowserProcessHandler> {
-        Some(SampleBrowserProcessHandler::new_browser_process_handler(
-            self.window.clone(),
-        ))
+        Some(SampleBrowserProcessHandler::new_browser_process_handler())
     }
 }
