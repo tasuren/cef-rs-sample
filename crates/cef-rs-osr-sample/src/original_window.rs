@@ -36,12 +36,7 @@ impl ApplicationHandler for SampleWindowApp {
         let render_handler =
             SampleRenderHandler::new_render_handler(Rc::clone(&window), size, scale_factor as _);
 
-        let browser_settings = BrowserSettings {
-            // `external_begin_frame_enabled`を使うと無視されるなんて話も。
-            // https://github.com/daktronics/cef-mixer/blob/fc290b56a1b84554ee1ec9860d12563c9810d5e1/src/web_layer.cpp#L1172-L1178
-            windowless_frame_rate: 60,
-            ..Default::default()
-        };
+        let browser_settings = BrowserSettings::default();
         let mut context = cef::request_context_create_context(
             Some(&RequestContextSettings::default()),
             Some(&mut SampleRequestContextHandler::new_request_context_handler()),
