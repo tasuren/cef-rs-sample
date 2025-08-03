@@ -1,16 +1,24 @@
+use std::sync::mpsc::Sender;
+
 use cef::{
     BrowserProcessHandler, CommandLine, ImplBrowserProcessHandler, ImplCommandLine,
     WrapBrowserProcessHandler, rc::Rc as _,
 };
 
+/// メッセージループを動かすイベントを送信するための`Sender`。
+/// `i64`は次にメッセージを動かす時間。
+pub type TxPump = Sender<i64>;
+
 pub struct SampleBrowserProcessHandler {
     object: *mut cef::rc::RcImpl<cef::sys::cef_browser_process_handler_t, Self>,
+    tx_pump: TxPump,
 }
 
 impl SampleBrowserProcessHandler {
-    pub fn new_browser_process_handler() -> BrowserProcessHandler {
+    pub fn new_browser_process_handler(tx_pump: TxPump) -> BrowserProcessHandler {
         BrowserProcessHandler::new(Self {
             object: std::ptr::null_mut(),
+            tx_pump,
         })
     }
 }
@@ -41,7 +49,10 @@ impl Clone for SampleBrowserProcessHandler {
             rc_impl
         };
 
-        Self { object }
+        Self {
+            object,
+            tx_pump: self.tx_pump.clone(),
+        }
     }
 }
 
@@ -60,5 +71,8 @@ impl ImplBrowserProcessHandler for SampleBrowserProcessHandler {
         println!("cef context intiialized");
     }
 
-    //fn on_schedule_message_pump_work(&self, delay_ms: i64) {}
+    fn on_schedule_message_pump_work(&self, delay_ms: i64) {
+        println!("1 {delay_ms}");
+        let _ = self.tx_pump.send(delay_ms);
+    }
 }

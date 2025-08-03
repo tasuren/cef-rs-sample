@@ -1,3 +1,5 @@
+use std::{sync::mpsc::RecvTimeoutError, time::Duration};
+
 use cef::{args::Args, *};
 use winit::{
     event_loop::{ControlFlow, EventLoop},
@@ -34,7 +36,8 @@ fn main() -> std::process::ExitCode {
     let switch = CefString::from("type");
     let is_browser_process = cmd.has_switch(Some(&switch)) != 1;
 
-    let mut app = SampleApp::new_app();
+    let (tx_pump, rx_pump) = std::sync::mpsc::channel();
+    let mut app = SampleApp::new_app(tx_pump);
 
     let ret = execute_process(
         Some(args.as_main_args()),
@@ -81,22 +84,40 @@ fn main() -> std::process::ExitCode {
     event_loop.set_control_flow(ControlFlow::Poll);
 
     let mut app = original_window::SampleWindowApp::default();
-    let result = loop {
+    let mut delay = 0i64;
+
+    let result = 'message_loop: loop {
         do_message_loop_work();
         let timeout = Some(std::time::Duration::ZERO);
         let status = event_loop.pump_app_events(timeout, &mut app);
 
         if let PumpStatus::Exit(exit_code) = status {
-            break std::process::ExitCode::from(exit_code as u8);
+            break exit_code;
         }
 
-        // ↓このマジックナンバーはなんだろう。60FPSに固定するため？
-        std::thread::sleep(std::time::Duration::from_millis(1000 / 17));
+        loop {
+            delay = match rx_pump.recv_timeout(Duration::from_millis(delay as _)) {
+                Ok(delay) => delay,
+                Err(e) => match e {
+                    RecvTimeoutError::Disconnected => break 'message_loop 0,
+                    RecvTimeoutError::Timeout => {
+                        delay = 0;
+                        break;
+                    }
+                },
+            };
+
+            if delay <= 0 {
+                break;
+            }
+        }
+
+        // println!("{delay}");
 
         // TODO: ここで待機しないようにする。`OnScheduleMessagePumpWork`を使う？
     };
 
     shutdown();
 
-    result
+    std::process::ExitCode::from(result as u8)
 }
