@@ -1,5 +1,6 @@
 use std::rc::Rc;
 
+use cef::{ImplBrowser, ImplBrowserHost};
 use winit::{
     application::ApplicationHandler,
     dpi::PhysicalSize,
@@ -45,7 +46,7 @@ impl CefWithOsrApp {
             .expect("Browser is not initialized yet")
     }
 
-    fn browser(&self) -> &Browser {
+    fn browser(&self) -> &cef::Browser {
         &self.cef_state().browser
     }
 

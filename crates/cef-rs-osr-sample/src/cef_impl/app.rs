@@ -1,5 +1,5 @@
 use cef::{
-    ImplApp, WrapApp,
+    App, BrowserProcessHandler, ImplApp, WrapApp,
     rc::{Rc as _, RcImpl},
 };
 
@@ -60,7 +60,7 @@ impl ImplApp for SampleApp {
     fn on_before_command_line_processing(
         &self,
         _process_type: Option<&CefString>,
-        command_line: Option<&mut CommandLine>,
+        command_line: Option<&mut cef::CommandLine>,
     ) {
         if let Some(command_line) = command_line {
             // 毎回デバッグビルドを起動する度にキーチェーンのパスワードを求められるのを防止。
