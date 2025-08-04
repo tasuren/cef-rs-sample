@@ -1,24 +1,14 @@
-use std::{sync::mpsc::RecvTimeoutError, time::Duration};
+use std::time::Duration;
 
 use cef::{args::Args, *};
-use winit::{
-    event_loop::{ControlFlow, EventLoop},
-    platform::pump_events::{EventLoopExtPumpEvents, PumpStatus},
-};
+use winit::event_loop::{ControlFlow, EventLoop};
+
+use crate::app::PumpCefHandle;
 
 mod app;
-mod browser_process_handler;
-mod client;
-mod original_window;
+mod browser;
+mod cef_impl;
 mod platform_impl;
-mod render_handler;
-mod request_context_handler;
-
-pub use app::*;
-pub use browser_process_handler::*;
-pub use client::*;
-pub use render_handler::*;
-pub use request_context_handler::*;
 
 fn main() -> std::process::ExitCode {
     #[cfg(target_os = "macos")]
@@ -28,6 +18,9 @@ fn main() -> std::process::ExitCode {
         loader
     };
 
+    println!("22");
+    let event_loop = EventLoop::with_user_event().build().unwrap();
+
     let _ = api_hash(sys::CEF_API_VERSION_LAST, 0);
 
     let args = Args::new();
@@ -36,8 +29,8 @@ fn main() -> std::process::ExitCode {
     let switch = CefString::from("type");
     let is_browser_process = cmd.has_switch(Some(&switch)) != 1;
 
-    let (tx_pump, rx_pump) = std::sync::mpsc::channel();
-    let mut app = SampleApp::new_app(tx_pump);
+    println!("11");
+    let mut app = cef_impl::SampleApp::new_app(PumpCefHandle::new(event_loop.create_proxy()));
 
     let ret = execute_process(
         Some(args.as_main_args()),
@@ -79,42 +72,11 @@ fn main() -> std::process::ExitCode {
     };
 
     // イベントループを動かす。
-    let mut event_loop = EventLoop::new().unwrap();
+    let mut app = app::CefWithOsrApp::new(60);
 
-    event_loop.set_control_flow(ControlFlow::Poll);
-
-    let mut app = original_window::SampleWindowApp::default();
-    let mut delay = 0i64;
-
-    let result = 'message_loop: loop {
-        do_message_loop_work();
-
-        let timeout = Some(std::time::Duration::ZERO);
-        let status = event_loop.pump_app_events(timeout, &mut app);
-
-        if let PumpStatus::Exit(exit_code) = status {
-            break exit_code;
-        }
-
-        loop {
-            delay = match rx_pump.recv_timeout(Duration::from_millis(delay as _)) {
-                Ok(delay) => delay,
-                Err(e) => match e {
-                    RecvTimeoutError::Disconnected => break 'message_loop 0,
-                    RecvTimeoutError::Timeout => {
-                        delay = 0;
-                        break;
-                    }
-                },
-            };
-
-            if delay <= 0 {
-                break;
-            }
-        }
-    };
+    event_loop.run_app(&mut app).unwrap();
 
     shutdown();
 
-    std::process::ExitCode::from(result as u8)
+    std::process::ExitCode::SUCCESS
 }

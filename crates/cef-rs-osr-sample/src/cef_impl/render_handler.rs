@@ -17,15 +17,10 @@ pub struct SampleRenderHandler {
     window: ViewWindow,
     surface: std::rc::Rc<RefCell<Surface<ViewWindow, ViewWindow>>>,
     size: ViewSize,
-    scale_factor: f64,
 }
 
 impl SampleRenderHandler {
-    pub fn new_render_handler(
-        window: ViewWindow,
-        size: ViewSize,
-        scale_factor: f64,
-    ) -> RenderHandler {
+    pub fn new_render_handler(window: ViewWindow, size: ViewSize) -> RenderHandler {
         let context = Context::new(std::rc::Rc::clone(&window)).unwrap();
 
         RenderHandler::new(Self {
@@ -33,7 +28,6 @@ impl SampleRenderHandler {
             window: std::rc::Rc::clone(&window),
             surface: std::rc::Rc::new(RefCell::new(Surface::new(&context, window).unwrap())),
             size,
-            scale_factor,
         })
     }
 }
@@ -51,7 +45,6 @@ impl Clone for SampleRenderHandler {
             window: std::rc::Rc::clone(&self.window),
             surface: std::rc::Rc::clone(&self.surface),
             size: std::rc::Rc::clone(&self.size),
-            scale_factor: self.scale_factor,
         }
     }
 }
@@ -81,7 +74,9 @@ impl ImplRenderHandler for SampleRenderHandler {
             let size = self.size.borrow();
 
             if size.width > 0 && size.height > 0 {
-                let logical_size = size.to_logical::<i32>(self.scale_factor);
+                let scale_factor = self.window.scale_factor();
+                let logical_size = size.to_logical::<i32>(scale_factor);
+
                 rect.width = logical_size.width as _;
                 rect.height = logical_size.height as _;
 
@@ -105,7 +100,7 @@ impl ImplRenderHandler for SampleRenderHandler {
         // でも念のため、拡大率を教えておく。
 
         if let Some(screen_info) = screen_info {
-            screen_info.device_scale_factor = self.scale_factor as _;
+            screen_info.device_scale_factor = self.window.scale_factor() as _;
             return true as _;
         }
 
