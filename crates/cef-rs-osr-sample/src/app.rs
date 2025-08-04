@@ -1,4 +1,4 @@
-use std::rc::Rc;
+use std::{cell::RefCell, rc::Rc};
 
 use cef::{ImplBrowser, ImplBrowserHost};
 use winit::{
@@ -9,10 +9,7 @@ use winit::{
     window::WindowAttributes,
 };
 
-use crate::{
-    cef_impl::{ViewSize, ViewWindow},
-    *,
-};
+use crate::{window::WindowState, *};
 
 #[derive(Default)]
 pub struct AppState {
@@ -21,13 +18,14 @@ pub struct AppState {
 
 pub struct CefState {
     browser: cef::Browser,
-    window: ViewWindow,
-    size: ViewSize,
 }
+
+pub type SharedWindowState = Rc<RefCell<window::WindowState>>;
 
 pub struct CefWithOsrApp {
     frame_rate: u64,
     app_state: AppState,
+    window_state: Option<SharedWindowState>,
     cef_state: Option<CefState>,
 }
 
@@ -36,8 +34,15 @@ impl CefWithOsrApp {
         Self {
             frame_rate,
             cef_state: None,
+            window_state: None,
             app_state: AppState::default(),
         }
+    }
+
+    fn window_state(&self) -> &SharedWindowState {
+        self.window_state
+            .as_ref()
+            .expect("Window is not initialized yet")
     }
 
     fn cef_state(&self) -> &CefState {
@@ -51,7 +56,7 @@ impl CefWithOsrApp {
     }
 
     fn resize(&self, size: PhysicalSize<u32>) {
-        *self.cef_state().size.borrow_mut() = size;
+        self.window_state().borrow_mut().resize(size);
 
         if let Some(host) = self.browser().host() {
             host.was_resized()
@@ -97,18 +102,12 @@ impl ApplicationHandler<UserEvent> for CefWithOsrApp {
         let window = event_loop
             .create_window(WindowAttributes::default())
             .unwrap();
-        let window = Rc::new(window);
+        self.window_state = Some(Rc::new(RefCell::new(WindowState::new(window))));
 
         // ブラウザの用意。
-        let (size, browser) = crate::browser::create_browser(&window, self.frame_rate as _);
-
-        self.cef_state = Some(CefState {
-            browser,
-            window,
-            size,
-        });
-
-        self.cef_state().window.request_redraw();
+        let browser =
+            crate::browser::create_browser(Rc::clone(self.window_state()), self.frame_rate as _);
+        self.cef_state = Some(CefState { browser });
     }
 
     fn user_event(&mut self, event_loop: &ActiveEventLoop, event: UserEvent) {

@@ -1,8 +1,8 @@
-use std::{cell::RefCell, rc::Rc};
+use std::rc::Rc;
 
-use crate::cef_impl::{self, ViewSize, ViewWindow};
+use crate::{app::SharedWindowState, cef_impl};
 
-pub fn create_browser(window: &ViewWindow, frame_rate: i32) -> (ViewSize, cef::Browser) {
+pub fn create_browser(window_state: SharedWindowState, frame_rate: i32) -> cef::Browser {
     // 作ったウィンドウをCEFで使う準備として、レンダリング関連の設定を用意。
     let window_info = cef::WindowInfo {
         // CEFにウィンドウを作らせないために必要。
@@ -11,9 +11,8 @@ pub fn create_browser(window: &ViewWindow, frame_rate: i32) -> (ViewSize, cef::B
     };
 
     // 描画関連の実装を用意する。
-    let size = Rc::new(RefCell::new(window.inner_size()));
     let render_handler =
-        cef_impl::SampleRenderHandler::new_render_handler(Rc::clone(window), Rc::clone(&size));
+        cef_impl::SampleRenderHandler::new_render_handler(Rc::clone(&window_state));
 
     // ブラウザの作成を行う。
     let browser_settings = cef::BrowserSettings {
@@ -38,5 +37,5 @@ pub fn create_browser(window: &ViewWindow, frame_rate: i32) -> (ViewSize, cef::B
         context.as_mut(),
     );
 
-    (size, browser.expect("Failed to create browser"))
+    browser.expect("Failed to create browser")
 }

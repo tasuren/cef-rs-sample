@@ -9,6 +9,7 @@ mod app;
 mod browser;
 mod cef_impl;
 mod platform_impl;
+mod window;
 
 fn main() {
     let event_loop = EventLoop::with_user_event().build().unwrap();
