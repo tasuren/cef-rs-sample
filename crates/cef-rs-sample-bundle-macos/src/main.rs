@@ -171,22 +171,17 @@ mod mac {
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut run_flag = false;
     let mut build_flag = true;
-    let mut osr_flag = false;
+    let mut package = "cef-rs-sample";
 
     for arg in std::env::args() {
         match arg.as_str() {
             "--run" => run_flag = true,
             "--no-build" => build_flag = false,
-            "--osr" => osr_flag = true,
+            "--osr" => package = "cef-rs-osr-sample",
+            "--browser" => package = "mini-browser",
             _ => {}
         }
     }
-
-    let package = if osr_flag {
-        "cef-rs-osr-sample"
-    } else {
-        "cef-rs-sample"
-    };
 
     if build_flag {
         mac::main(package)?;
