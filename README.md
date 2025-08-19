@@ -9,6 +9,9 @@
   普通にCEFを起動するだけ。Chrome Runtime Styleを使う。
 - [`cef-rs-osr-sample`](./crates/cef-rs-osr-sample/)  
   cef-rsに加え、winitとsoftbufferを用いてOff-Screen Renderingをする例。
+- [`mini-browser`](./crates/mini-browser/)  
+  CEFの画面をwinitで作ったウィンドウの子Viewとして表示し、一緒にwryで作ったWebViewも子Viewとして表示する例。
+  URLを入れてウェブページを移動できるようなUIをwryのWebViewで提供する、ミニブラウザ的なやつ。tauriと一緒にCEFが使えないかテストするためにやった。
 - [`cef-rs-sample-helper`](./crates/cef-rs-sample-helper)  
   CEFのためのヘルパー。
 - [`cef-rs-sample-bundle-macos`](./crates/cef-rs-sample-bundle-macos/)  
