@@ -38,9 +38,10 @@ pub fn set_browser(window: &Window, _frame_rate: i32) {
         .ok()
         .unwrap_or_else(|| "https://www.google.com".to_owned());
 
+    let mut client = cef_impl::SampleClient::new_client();
     let browser = cef::browser_host_create_browser_sync(
         Some(&window_info),
-        Some(&mut cef_impl::SampleClient::new_client()),
+        Some(&mut client),
         Some(&url.as_str().into()),
         Some(&browser_settings),
         None,

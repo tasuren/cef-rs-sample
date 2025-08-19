@@ -16,48 +16,66 @@ pub mod raw_view {
     }
 }
 
-/// 右クリックしてもクラッシュしないようにする。
-/// 参考: https://github.com/tauri-apps/cef-rs/issues/96
-pub mod handling_send_event {
-    use objc2::{runtime::*, *};
+/// This modules include bindings of `include/cef_application_mac.h`.
+pub(crate) mod cef_application_mac {
+    use objc2::{extern_protocol, runtime::Bool};
 
-    extern "C" fn set_handling_send_event(
-        _this: *mut AnyObject,
-        _cmd: Sel,
-        _handling_send_event: Bool,
-    ) {
+    extern_protocol!(
+        #[allow(clippy::missing_safety_doc)]
+        pub unsafe trait CrAppProtocol {
+            #[unsafe(method(isHandlingSendEvent))]
+            unsafe fn is_handling_send_event(&self) -> Bool;
+        }
+    );
+
+    extern_protocol!(
+        #[allow(clippy::missing_safety_doc)]
+        pub unsafe trait CrAppControlProtocol: CrAppProtocol {
+            #[unsafe(method(setHandlingSendEvent:))]
+            unsafe fn set_handling_send_event(&self, handling_send_event: Bool);
+        }
+    );
+
+    extern_protocol!(
+        #[allow(clippy::missing_safety_doc)]
+        pub unsafe trait CefAppProtocol: CrAppControlProtocol {}
+    );
+}
+
+pub mod ns_application {
+    use std::cell::RefCell;
+
+    pub use super::cef_application_mac::*;
+    use objc2::{ClassType, DefinedClass, define_class, rc::Retained, runtime::Bool};
+    use objc2_app_kit::NSApplication;
+
+    pub struct Ivars {
+        handling_send_event: RefCell<Bool>,
     }
 
-    extern "C" fn is_handling_send_event(_this: *mut AnyObject, _cmd: Sel) -> Bool {
-        Bool::YES
-    }
+    define_class!(
+        #[unsafe(super(NSApplication))]
+        #[ivars = Ivars]
+        pub struct SimpleApplication;
 
-    pub unsafe fn extend_nswindow_class() {
-        let ns_window = class!(NSApplication);
+        unsafe impl CrAppProtocol for SimpleApplication {
+            #[unsafe(method(isHandlingSendEvent))]
+            unsafe fn is_handling_send_event(&self) -> Bool {
+                *self.ivars().handling_send_event.borrow_mut()
+            }
+        }
 
-        let encoding_get = c"B@:";
-        let encoding_set = c"v@:B";
+        unsafe impl CrAppControlProtocol for SimpleApplication {
+            #[unsafe(method(setHandlingSendEvent:))]
+            unsafe fn set_handling_send_event(&self, handling_send_event: Bool) {
+                *self.ivars().handling_send_event.borrow_mut() = handling_send_event;
+            }
+        }
 
-        let _ = unsafe {
-            objc2::ffi::class_addMethod(
-                ns_window as *const _ as *mut _,
-                sel!(isHandlingSendEvent),
-                std::mem::transmute::<*const (), unsafe extern "C-unwind" fn()>(
-                    is_handling_send_event as *const (),
-                ),
-                encoding_get.as_ptr(),
-            )
-        };
+        unsafe impl CefAppProtocol for SimpleApplication {}
+    );
 
-        let _ = unsafe {
-            objc2::ffi::class_addMethod(
-                ns_window as *const _ as *mut _,
-                sel!(setHandlingSendEvent:),
-                std::mem::transmute::<*const (), unsafe extern "C-unwind" fn()>(
-                    set_handling_send_event as *const (),
-                ),
-                encoding_set.as_ptr(),
-            )
-        };
+    pub fn initialize_simple_application() -> Retained<SimpleApplication> {
+        unsafe { objc2::msg_send![SimpleApplication::class(), sharedApplication] }
     }
 }

@@ -67,10 +67,22 @@ mod mac {
         app_path.join("Contents")
     }
 
-    fn create_app(app_path: &Path, exec_name: &str, bin: &Path, package: &str) -> PathBuf {
+    fn create_app(
+        app_path: &Path,
+        exec_name: &str,
+        bin: &Path,
+        package: &str,
+        is_helper: bool,
+    ) -> PathBuf {
         let app_path = app_path.join(exec_name).with_extension("app");
         let contents_path = create_app_layout(&app_path);
-        create_info_plist(&contents_path, exec_name, package).unwrap();
+        create_info_plist(
+            &contents_path,
+            exec_name,
+            package,
+            if is_helper { "1" } else { "0" }.to_owned(),
+        )
+        .unwrap();
         fs::copy(bin, app_path.join(EXEC_PATH).join(exec_name)).unwrap();
         app_path
     }
@@ -78,7 +90,13 @@ mod mac {
     // See https://bitbucket.org/chromiumembedded/cef/wiki/GeneralUsage.md#markdown-header-macos
     fn bundle(app_path: &Path, package: &str) {
         let example_path = PathBuf::from(app_path);
-        let main_app_path = create_app(app_path, package, &example_path.join(package), package);
+        let main_app_path = create_app(
+            app_path,
+            package,
+            &example_path.join(package),
+            package,
+            false,
+        );
 
         let cef_path = cef::sys::get_cef_dir().unwrap();
 
@@ -94,6 +112,7 @@ mod mac {
                 &format!("{package} {helper}"),
                 &example_path.join("cef-rs-sample-helper"),
                 package,
+                true,
             );
         });
     }
@@ -102,6 +121,7 @@ mod mac {
         contents_path: &Path,
         exec_name: &str,
         package: &str,
+        ls_ui_element: String,
     ) -> Result<(), Box<dyn std::error::Error>> {
         let info_plist = InfoPlist {
             cf_bundle_development_region: "en".to_string(),
@@ -120,7 +140,7 @@ mod mac {
                 .collect(),
             ls_file_quarantine_enabled: true,
             ls_minimum_system_version: "11.0".to_string(),
-            ls_ui_element: "0".to_string(),
+            ls_ui_element,
             ns_bluetooth_always_usage_description: exec_name.to_string(),
             ns_supports_automatic_graphics_switching: true,
             ns_web_browser_publickey_credential_usage_description: exec_name.to_string(),

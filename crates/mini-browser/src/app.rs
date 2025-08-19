@@ -6,7 +6,10 @@ use winit::{
     event_loop::{ActiveEventLoop, ControlFlow, EventLoopProxy},
 };
 
-use crate::{browser::set_browser, ui::BrowserUI};
+use crate::{
+    browser::{set_browser},
+    ui::BrowserUI,
+};
 
 #[derive(Default)]
 pub struct AppState {

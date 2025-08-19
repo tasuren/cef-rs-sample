@@ -11,9 +11,7 @@ struct LoadUrlArgs {
 
 #[command]
 fn load_url(args: LoadUrlArgs) -> bool {
-    println!("aaa");
     if let Some(frame) = get_browser().main_frame() {
-        println!("bbb");
         frame.load_url(Some(&args.url.as_str().into()));
 
         true

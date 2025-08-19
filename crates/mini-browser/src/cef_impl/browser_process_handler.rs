@@ -68,7 +68,6 @@ impl ImplBrowserProcessHandler for SampleBrowserProcessHandler {
     }
 
     fn on_schedule_message_pump_work(&self, delay_ms: i64) {
-        println!("on_schedule_message_pump_work: delay_ms = {delay_ms}ms");
         self.pump_cef_handle.send_pump_cef_event(delay_ms);
     }
 }

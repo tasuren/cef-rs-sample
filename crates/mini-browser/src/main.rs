@@ -3,17 +3,15 @@ use winit::event_loop::EventLoop;
 
 use crate::app::PumpCefHandle;
 
-mod commands;
 mod app;
 mod browser;
 mod cef_impl;
+mod commands;
 mod platform_impl;
 mod ui;
 mod window;
 
 fn main() {
-    let event_loop = EventLoop::with_user_event().build().unwrap();
-
     // CEFのライブラリの読み込みとプロセスの起動。
     #[cfg(target_os = "macos")]
     let _loader = {
@@ -22,6 +20,12 @@ fn main() {
         assert!(loader.load());
         loader
     };
+
+    // macOSで右クリックができないのを修正する。
+    #[cfg(target_os = "macos")]
+    platform_impl::macos::ns_application::initialize_simple_application();
+
+    let event_loop = EventLoop::with_user_event().build().unwrap();
 
     let _ = cef::api_hash(cef::sys::CEF_API_VERSION_LAST, 0);
 
@@ -64,12 +68,6 @@ fn main() {
         ),
         1
     );
-
-    // macOSで右クリックができないのを修正する。
-    #[cfg(target_os = "macos")]
-    unsafe {
-        platform_impl::macos::handling_send_event::extend_nswindow_class()
-    };
 
     // イベントループを動かす。
     const FPS: u64 = 60;

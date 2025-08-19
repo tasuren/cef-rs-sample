@@ -1,17 +1,31 @@
+use std::{cell::RefCell, rc::Rc};
+
 use cef::{
-    Client, ImplClient, WrapClient,
+    Client, ContextMenuHandler, ImplClient, LifeSpanHandler, WrapClient,
     rc::{Rc as _, RcImpl},
 };
 
+use crate::cef_impl::{ContextMenuHandlerService, LifeSpanHandlerService};
+
 pub struct SampleClient {
     object: *mut RcImpl<cef::sys::_cef_client_t, Self>,
+    life_span_handler: LifeSpanHandler,
+    context_menu_handler: ContextMenuHandler,
 }
 
 impl SampleClient {
     pub fn new_client() -> Client {
-        Client::new(Self {
+        let shared_client = Rc::new(RefCell::new(None));
+
+        let client = Client::new(Self {
             object: std::ptr::null_mut(),
-        })
+            life_span_handler: LifeSpanHandlerService::create(),
+            context_menu_handler: ContextMenuHandlerService::create(Rc::clone(&shared_client)),
+        });
+
+        *shared_client.borrow_mut() = Some(client.clone());
+
+        client
     }
 }
 
@@ -29,7 +43,11 @@ impl Clone for SampleClient {
             rc_impl
         };
 
-        Self { object }
+        Self {
+            object,
+            life_span_handler: self.life_span_handler.clone(),
+            context_menu_handler: self.context_menu_handler.clone(),
+        }
     }
 }
 
@@ -45,5 +63,13 @@ impl cef::rc::Rc for SampleClient {
 impl ImplClient for SampleClient {
     fn get_raw(&self) -> *mut cef::sys::_cef_client_t {
         self.object.cast()
+    }
+
+    fn context_menu_handler(&self) -> Option<cef::ContextMenuHandler> {
+        Some(self.context_menu_handler.clone())
+    }
+
+    fn life_span_handler(&self) -> Option<cef::LifeSpanHandler> {
+        Some(self.life_span_handler.clone())
     }
 }

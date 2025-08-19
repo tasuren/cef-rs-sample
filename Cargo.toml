@@ -3,7 +3,8 @@ members = [
     "crates/cef-rs-osr-sample",
     "crates/cef-rs-sample",
     "crates/cef-rs-sample-bundle-macos",
-    "crates/cef-rs-sample-helper", "crates/mini-browser",
+    "crates/cef-rs-sample-helper",
+    "crates/mini-browser",
 ]
 resolver = "3"
 
