@@ -3,8 +3,11 @@ use cef::{args::Args, *};
 fn main() {
     let args = Args::new();
 
-    let mut sandbox = cef::sandbox::Sandbox::new();
-    sandbox.initialize(args.as_main_args());
+    #[cfg(target_os = "macos")]
+    {
+        let mut sandbox = cef::sandbox::Sandbox::new();
+        sandbox.initialize(args.as_main_args());
+    }
 
     #[cfg(target_os = "macos")]
     let _loader = {

@@ -23,6 +23,8 @@ pub fn set_browser(window: &Window, _frame_rate: i32) {
 
     let window_info = cef::WindowInfo {
         bounds,
+        parent_window: crate::platform_impl::raw_view::get_hwnd(window),
+        #[cfg(target_os = "macos")]
         parent_view: crate::platform_impl::raw_view::get_view(window),
         ..Default::default()
     };
