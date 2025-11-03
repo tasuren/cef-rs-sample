@@ -60,9 +60,9 @@ impl ImplContextMenuHandler for ContextMenuHandlerService {
 
     fn on_before_context_menu(
         &self,
-        browser: Option<&mut cef::Browser>,
-        frame: Option<&mut cef::Frame>,
-        params: Option<&mut cef::ContextMenuParams>,
+        _browser: Option<&mut cef::Browser>,
+        _frame: Option<&mut cef::Frame>,
+        _params: Option<&mut cef::ContextMenuParams>,
         model: Option<&mut cef::MenuModel>,
     ) {
         if let Some(model) = model {

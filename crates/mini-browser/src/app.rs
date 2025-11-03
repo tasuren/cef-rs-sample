@@ -18,7 +18,7 @@ pub struct AppState {
 
 pub struct MiniBrowserApp {
     frame_rate: u64,
-    browser: Option<cef::Browser>,
+    _browser: Option<cef::Browser>,
     browser_ui: Option<BrowserUI>,
     app_state: AppState,
 }
@@ -27,7 +27,7 @@ impl MiniBrowserApp {
     pub fn new(frame_rate: u64) -> Self {
         Self {
             frame_rate,
-            browser: None,
+            _browser: None,
             browser_ui: None,
             app_state: AppState::default(),
         }
