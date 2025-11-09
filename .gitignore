@@ -1,7 +1,7 @@
 /target
 .cargo
 
-.experimental
+.dev
 console.log
 
 # OS
