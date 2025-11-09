@@ -23,7 +23,7 @@ fn main() {
 
     // macOSで右クリックができないのを修正する。
     #[cfg(target_os = "macos")]
-    platform_impl::macos::ns_application::initialize_simple_application();
+    platform_impl::macos::ns_application::initialize_ns_app();
 
     let event_loop = EventLoop::with_user_event().build().unwrap();
 
