@@ -9,7 +9,6 @@ mod cef_impl;
 mod commands;
 mod platform_impl;
 mod ui;
-mod window;
 
 fn main() {
     // CEFのライブラリの読み込みとプロセスの起動。
