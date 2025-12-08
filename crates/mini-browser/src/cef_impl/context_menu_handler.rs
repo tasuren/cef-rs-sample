@@ -83,26 +83,23 @@ impl ImplContextMenuHandler for ContextMenuHandlerService {
             return true as _;
         }
 
-        match command_id {
-            MENU_ID_INSPECT_ELEMENT => {
-                let Some(browser_host) = browser.and_then(|browser| browser.host()) else {
-                    return true as _;
-                };
-                let Some(params) = params else {
-                    return true as _;
-                };
+        if command_id == MENU_ID_INSPECT_ELEMENT {
+            let Some(browser_host) = browser.and_then(|browser| browser.host()) else {
+                return true as _;
+            };
+            let Some(params) = params else {
+                return true as _;
+            };
 
-                browser_host.show_dev_tools(
-                    None,
-                    None::<&mut cef::Client>,
-                    None,
-                    Some(&cef::Point {
-                        x: params.xcoord(),
-                        y: params.ycoord(),
-                    }),
-                );
-            }
-            _ => {}
+            browser_host.show_dev_tools(
+                None,
+                None::<&mut cef::Client>,
+                None,
+                Some(&cef::Point {
+                    x: params.xcoord(),
+                    y: params.ycoord(),
+                }),
+            );
         }
 
         true as _
