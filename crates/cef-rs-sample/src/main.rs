@@ -120,7 +120,7 @@ impl ImplBrowserProcessHandler for DemoBrowserProcessHandler {
         println!("cef context intiialized");
 
         let mut client = DemoClient::new_client();
-        let url = CefString::from("chrome://settings/");
+        let url = CefString::from("https://www.google.com");
 
         let browser_view = browser_view_create(
             Some(&mut client),
@@ -275,7 +275,6 @@ impl ImplWindowDelegate for DemoWindowDelegate {
     }
 }
 
-// FIXME: Rewrite this demo based on cef/tests/cefsimple
 fn main() {
     #[cfg(target_os = "macos")]
     let _loader = {
@@ -283,6 +282,9 @@ fn main() {
         assert!(loader.load());
         loader
     };
+
+    #[cfg(target_os = "macos")]
+    macos::initialize_ns_app();
 
     let _ = api_hash(sys::CEF_API_VERSION_LAST, 0);
 
@@ -323,11 +325,6 @@ fn main() {
         1
     );
 
-    #[cfg(target_os = "macos")]
-    unsafe {
-        macos::extend_nswindow_class()
-    };
-
     run_message_loop();
 
     let window = window.lock().expect("Failed to lock window");
@@ -339,45 +336,45 @@ fn main() {
 
 #[cfg(target_os = "macos")]
 mod macos {
-    use objc2::{runtime::*, *};
+    use std::cell::RefCell;
 
-    extern "C" fn set_handling_send_event(
-        _this: *mut AnyObject,
-        _cmd: Sel,
-        _handling_send_event: Bool,
-    ) {
+    use cef::application_mac::{CefAppProtocol, CrAppControlProtocol, CrAppProtocol};
+    use objc2::{rc::*, runtime::*, *};
+    use objc2_app_kit::{NSApp, NSApplication};
+
+    pub struct Ivars {
+        handling_send_event: RefCell<Bool>,
     }
 
-    extern "C" fn is_handling_send_event(_this: *mut AnyObject, _cmd: Sel) -> Bool {
-        Bool::YES
-    }
+    define_class!(
+        #[unsafe(super(NSApplication))]
+        #[ivars = Ivars]
+        pub struct DemoApp;
 
-    pub unsafe fn extend_nswindow_class() {
-        let ns_window = class!(NSApplication);
+        unsafe impl CrAppProtocol for DemoApp {
+            #[unsafe(method(isHandlingSendEvent))]
+            unsafe fn is_handling_send_event(&self) -> Bool {
+                *self.ivars().handling_send_event.borrow_mut()
+            }
+        }
 
-        let encoding_get = c"B@:";
-        let encoding_set = c"v@:B";
+        unsafe impl CrAppControlProtocol for DemoApp {
+            #[unsafe(method(setHandlingSendEvent:))]
+            unsafe fn set_handling_send_event(&self, handling_send_event: Bool) {
+                *self.ivars().handling_send_event.borrow_mut() = handling_send_event;
+            }
+        }
 
-        let _ = unsafe {
-            objc2::ffi::class_addMethod(
-                ns_window as *const _ as *mut _,
-                sel!(isHandlingSendEvent),
-                std::mem::transmute::<*const (), unsafe extern "C-unwind" fn()>(
-                    is_handling_send_event as *const (),
-                ),
-                encoding_get.as_ptr(),
-            )
-        };
+        unsafe impl CefAppProtocol for DemoApp {}
+    );
 
-        let _ = unsafe {
-            objc2::ffi::class_addMethod(
-                ns_window as *const _ as *mut _,
-                sel!(setHandlingSendEvent:),
-                std::mem::transmute::<*const (), unsafe extern "C-unwind" fn()>(
-                    set_handling_send_event as *const (),
-                ),
-                encoding_set.as_ptr(),
-            )
-        };
+    pub fn initialize_ns_app() {
+        let mtm = MainThreadMarker::new().unwrap();
+
+        unsafe {
+            let _: Retained<AnyObject> = objc2::msg_send![DemoApp::class(), sharedApplication];
+        }
+
+        assert!(NSApp(mtm).isKindOfClass(DemoApp::class()));
     }
 }

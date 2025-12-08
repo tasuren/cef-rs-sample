@@ -1,44 +1,41 @@
-use objc2::{runtime::*, *};
+use std::cell::RefCell;
 
-// ==== 右クリックしてもクラッシュしないようにする。 ====
-// 参考: https://github.com/tauri-apps/cef-rs/issues/96
+use cef::application_mac::{CefAppProtocol, CrAppControlProtocol, CrAppProtocol};
+use objc2::{rc::*, runtime::*, *};
+use objc2_app_kit::{NSApp, NSApplication};
 
-extern "C" fn set_handling_send_event(
-    _this: *mut AnyObject,
-    _cmd: Sel,
-    _handling_send_event: Bool,
-) {
+pub struct Ivars {
+    handling_send_event: RefCell<Bool>,
 }
 
-extern "C" fn is_handling_send_event(_this: *mut AnyObject, _cmd: Sel) -> Bool {
-    Bool::YES
-}
+define_class!(
+    #[unsafe(super(NSApplication))]
+    #[ivars = Ivars]
+    pub struct DemoApp;
 
-pub unsafe fn extend_nswindow_class() {
-    let ns_window = class!(NSApplication);
+    unsafe impl CrAppProtocol for DemoApp {
+        #[unsafe(method(isHandlingSendEvent))]
+        unsafe fn is_handling_send_event(&self) -> Bool {
+            *self.ivars().handling_send_event.borrow_mut()
+        }
+    }
 
-    let encoding_get = c"B@:";
-    let encoding_set = c"v@:B";
+    unsafe impl CrAppControlProtocol for DemoApp {
+        #[unsafe(method(setHandlingSendEvent:))]
+        unsafe fn set_handling_send_event(&self, handling_send_event: Bool) {
+            *self.ivars().handling_send_event.borrow_mut() = handling_send_event;
+        }
+    }
 
-    let _ = unsafe {
-        objc2::ffi::class_addMethod(
-            ns_window as *const _ as *mut _,
-            sel!(isHandlingSendEvent),
-            std::mem::transmute::<*const (), unsafe extern "C-unwind" fn()>(
-                is_handling_send_event as *const (),
-            ),
-            encoding_get.as_ptr(),
-        )
-    };
+    unsafe impl CefAppProtocol for DemoApp {}
+);
 
-    let _ = unsafe {
-        objc2::ffi::class_addMethod(
-            ns_window as *const _ as *mut _,
-            sel!(setHandlingSendEvent:),
-            std::mem::transmute::<*const (), unsafe extern "C-unwind" fn()>(
-                set_handling_send_event as *const (),
-            ),
-            encoding_set.as_ptr(),
-        )
-    };
+pub fn initialize_ns_app() {
+    let mtm = MainThreadMarker::new().unwrap();
+
+    unsafe {
+        let _: Retained<AnyObject> = objc2::msg_send![DemoApp::class(), sharedApplication];
+    }
+
+    assert!(NSApp(mtm).isKindOfClass(DemoApp::class()));
 }

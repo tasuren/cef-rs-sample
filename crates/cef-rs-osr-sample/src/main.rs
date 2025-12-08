@@ -12,6 +12,9 @@ mod platform_impl;
 mod window;
 
 fn main() {
+    #[cfg(target_os = "macos")]
+    platform_impl::macos::initialize_ns_app();
+
     let event_loop = EventLoop::with_user_event().build().unwrap();
 
     // CEFのライブラリの読み込みとプロセスの起動。
@@ -65,12 +68,6 @@ fn main() {
         ),
         1
     );
-
-    // macOSで右クリックができないのを修正する。
-    #[cfg(target_os = "macos")]
-    unsafe {
-        platform_impl::macos::extend_nswindow_class()
-    };
 
     // イベントループを動かす。
     const FPS: u64 = 60;
