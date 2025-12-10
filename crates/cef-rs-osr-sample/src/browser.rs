@@ -6,7 +6,7 @@ pub fn create_browser(window_state: SharedWindowState, frame_rate: i32) -> cef::
     // 作ったウィンドウをCEFで使う準備として、レンダリング関連の設定を用意。
     let window_info = cef::WindowInfo {
         // CEFにウィンドウを作らせないために必要。
-        windowless_rendering_enabled: true as _,
+        windowless_rendering_enabled: true.into(),
         ..Default::default()
     };
 
@@ -26,7 +26,7 @@ pub fn create_browser(window_state: SharedWindowState, frame_rate: i32) -> cef::
 
     let url = std::env::var("URL")
         .ok()
-        .unwrap_or_else(|| "https://bevy.org/examples/3d-rendering/motion-blur/".to_owned());
+        .unwrap_or_else(|| "https://www.google.com".to_owned());
 
     let browser = cef::browser_host_create_browser_sync(
         Some(&window_info),
