@@ -1,4 +1,4 @@
-# cef-rs-sample
+# cef-rs sample
 [cef-rs](https://github.com/tauri-apps/cef-rs)を使って、何かしら作ってみる試み。
 ちょっとした勉強目的なので、macOSでしか動作確認していません。
 
