@@ -35,3 +35,9 @@ cargo run -p cef-rs-sample-bundle-macos -- --osr
 
 ## 謝辞
 cef-rsとcef-rsのリポジトリにあるサンプルコードをベースに実装しています。
+
+## ライセンス
+このリポジトリはBSD Zero Clause Licenseの下で公開されています。
+
+TL;DR 著作権表記しないで自由に改変・再利用して問題ありません。保証は免責となります。詳細は[`LICENSE`](LICENSE)を確認してください。
+
